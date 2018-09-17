@@ -5,12 +5,13 @@ RUN apt-get -qq update \
             ca-certificates curl git libpng-dev libfreetype6-dev libjpeg62-turbo-dev \
             libicu-dev libxml++2.6-dev \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ > /dev/null \
-    && docker-php-ext-install bcmath  exif gd intl pdo_mysql soap zip xml \
-    && docker-php-ext-enable opcache \
+    && docker-php-ext-install bcmath mongo exif gd intl pdo_mysql soap zip xml \
+    && docker-php-ext-enable opcache mongo \
     && docker-php-source delete > /dev/null \
 # remove dev-dependencies
     && apt-get remove --assume-yes --quiet libpng-dev libfreetype6-dev libjpeg62-turbo-dev libicu-dev libxml++2.6-dev \
     && rm -r /var/lib/apt/lists/*
+
 
 # Configure time
 RUN rm /etc/localtime \
