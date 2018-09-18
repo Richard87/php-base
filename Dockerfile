@@ -1,18 +1,17 @@
-FROM php:7.2.10-apache-stretch
+FROM php:5.6-apache-stretch
 
 RUN apt-get -qq update \
         && apt-get install --assume-yes --quiet --no-install-recommends \
             ca-certificates curl git libpng-dev libfreetype6-dev libjpeg62-turbo-dev \
-            libicu-dev libxml++2.6-dev libmcrypt-dev libreadline-dev \
+            libicu-dev libxml++2.6-dev libmcrypt-dev libreadline-dev libssl-dev \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ > /dev/null \
-    && docker-php-ext-install pcntl bcmath exif gd intl pdo_mysql soap zip xml \
+    && docker-php-ext-install pcntl mcrypt bcmath exif gd intl pdo_mysql soap zip xml \
     && docker-php-ext-enable opcache \
     && docker-php-source delete > /dev/null \
-    && pecl install mongodb \
-    && pecl install --force mcrypt \
-    && docker-php-ext-enable mongodb mcrypt \
+    && pecl install -f mongo-1.6.16 \
+    && docker-php-ext-enable mongo \
 # remove dev-dependencies
-    && apt-get remove --assume-yes --quiet libpng-dev libfreetype6-dev libjpeg62-turbo-dev libicu-dev libxml++2.6-dev libmcrypt-dev libreadline-dev \
+    && apt-get remove --assume-yes --quiet libpng-dev libfreetype6-dev libjpeg62-turbo-dev libicu-dev libxml++2.6-dev libmcrypt-dev libreadline-dev libssl-dev \
     && rm -r /var/lib/apt/lists/*
 
 
